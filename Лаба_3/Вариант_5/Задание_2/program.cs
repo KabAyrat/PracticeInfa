@@ -4,7 +4,6 @@ class Program
 {
     static void Main()
     {
-        // Создаем целочисленную квадратную матрицу
         int[,] matrix = {
             { 2, 4, 6 },
             { 7, 8, 10 },
@@ -16,7 +15,6 @@ class Program
         Console.WriteLine("Исходная матрица:");
         PrintMatrix(matrix);
 
-        // Находим и выводим номера строк, состоящих только из четных элементов
         Console.WriteLine("\nНомера строк, состоящих только из четных элементов:");
         for (int i = 0; i < size; i++)
         {
@@ -35,14 +33,12 @@ class Program
             }
         }
 
-        // Меняем местами 1 и 3 строки матрицы
         SwapRows(matrix, 0, 2);
 
         Console.WriteLine("\nМатрица после замены 1 и 3 строк:");
         PrintMatrix(matrix);
     }
 
-    // Метод для вывода матрицы
     static void PrintMatrix(int[,] matrix)
     {
         int size = matrix.GetLength(0);
@@ -56,7 +52,6 @@ class Program
         }
     }
 
-    // Метод для замены строк матрицы
     static void SwapRows(int[,] matrix, int row1, int row3)
     {
         int size = matrix.GetLength(1);
