@@ -1,16 +1,28 @@
 using System;
-using System.Linq;
 using System.IO;
 
 class Program
 {
     static void Main()
     {
-        string file = "test.txt";
-        string reader = File.ReadAllText(file);
+        // Чтение текста из файла
+        string filePath = @"C:\Users\ayraa\Desktop\input.txt";
 
-        char[] letters = { 'A', 'a', 'O', 'o', 'I', 'i', 'Y', 'y', 'E', 'e', 'U', 'u' };
+        string text = File.ReadAllText(filePath);
 
-        string[] words = reader.Split(letters[] {' ',',','.'}, StringSplitOptions.RemoveEmptyEntries);
+        string[] numberWords = { "ноль", "один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять" };
+
+        foreach (char c in text)
+        {
+            if (char.IsDigit(c))
+            {
+                int digit = c - '0'; 
+                Console.Write(numberWords[digit] + " "); 
+            }
+            else
+            {
+                Console.Write(c); 
+            }
+        }
     }
 }
