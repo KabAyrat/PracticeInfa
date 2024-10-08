@@ -7,46 +7,46 @@ class Program
 {
     static void Main()
     {
-        string inputFilePath = @"C:\Users\d229\Desktop\input2.txt"; 
-        string outputFilePath = @"C:\Users\d229\Desktop\output.txt";
+        string inputFilePath = @"C:\Users\ayraa\Desktop\test.txt";
+        string outputFilePath = @"C:\Users\ayraa\Desktop\output1.txt";
         Dictionary<string, List<string>> storeGroups = new Dictionary<string, List<string>>();
 
-        
-            string[] lines = File.ReadAllLines(inputFilePath);
 
-            foreach (string line in lines)
+        string[] lines = File.ReadAllLines(inputFilePath);
+
+        foreach (string line in lines)
+        {
+            string[] parts = line.Split('/');
+
+            if (parts.Length == 3)
             {
-                string[] parts = line.Split('|');
+                string storeName = parts[0].Trim();
+                string category = parts[1].Trim();
+                string address = parts[2].Trim();
 
-                if (parts.Length == 3)
+                if (!storeGroups.ContainsKey(category))
                 {
-                    string storeName = parts[0].Trim();
-                    string category = parts[1].Trim();
-                    string address = parts[2].Trim();
-
-                    if (!storeGroups.ContainsKey(category))
-                    {
-                        storeGroups[category] = new List<string>();
-                    }
-
-                    storeGroups[category].Add($"{storeName}, {address}");
+                    storeGroups[category] = new List<string>();
                 }
-            }
 
-            using (StreamWriter writer = new StreamWriter(outputFilePath))
+                storeGroups[category].Add($"{storeName}, {address}");
+            }
+        }
+
+        using (StreamWriter writer = new StreamWriter(outputFilePath))
+        {
+            foreach (var group in storeGroups)
             {
-                foreach (var group in storeGroups)
+                writer.WriteLine($"тип магазина: {group.Key}");
+                foreach (var store in group.Value)
                 {
-                    writer.WriteLine($"Специфика товара: {group.Key}");
-                    foreach (var store in group.Value)
-                    {
-                        writer.WriteLine($"- {store}");
-                    }
-                    writer.WriteLine(); 
+                    writer.WriteLine($"- {store}");
                 }
+                writer.WriteLine();
             }
+        }
 
-            Console.WriteLine("Данные успешно сгруппированы и записаны в файл.");
-        
+        Console.WriteLine("Данные успешно записаны в файл.");
+
     }
 }
