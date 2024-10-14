@@ -4,45 +4,56 @@ using System.IO;
 class Animal
 {
     private string name;                                                    // ЗАКРЫТЫЕ ПЕРЕМЕННЫЕ
-    private string animalClass;
-    private double averageWeight;
-
     public string Name
     {
         get { return name; }
         set { name = value; }
     }
 
-    public string Class                                                         //  ИНСКАПСУЛЯЦИЯ
+
+    private string animalClass;
+    public string Class                                                         //  ИНСКАПСУЛЯЦИЯ или КОНСТРУКТОР
     {   
         get { return animalClass; }
         set { animalClass = value; }
     }
 
+
+    private double averageWeight;
     public double AverageWeight
     {
         get { return averageWeight; }
-        set { averageWeight = value; }
+        set { 
+            if(value <= 0)
+            {
+                Console.WriteLine("значение должно быть больше нуля");
+            }
+            else
+            {
+                averageWeight = value;
+            }
+        }
     }
+
 
     public Animal()                                                                 //      ЭТО ВСЕ
-    {
-        Name = "undefined";
-        Class = "undefined";
-        AverageWeight = 1;
-    }
+    {                                                                               //
+        Name = "undefined";                                                         //
+        Class = "undefined";                                                        //
+        AverageWeight = 1;                                                          //
+    }                                                                               //
     public void InputFromUser()                                                     //      ВТОРОЕ
-    {
-        Console.Write("Введите имя животного: ");
-        Name = Console.ReadLine();
-
-        Console.Write("Введите класс животного: ");
-        Class = Console.ReadLine();
-
-        Console.Write("Введите средний вес животного: ");
-        averageWeight = double.Parse(Console.ReadLine());
-    }
-
+    {                                                                               //
+        Console.Write("введите имя животного: ");                                   //
+        Name = Console.ReadLine();                                                  //
+                                                                                    //
+        Console.Write("введите класс животного: ");                                 //
+        Class = Console.ReadLine();                                                 //
+                                                                                    //
+        Console.Write("введите средний вес животного: ");                           //
+        averageWeight = double.Parse(Console.ReadLine());                           //
+    }                                                                               //
+                                                                                    //
     public Animal(string name, string animalClass, double averageWeight)            //      ЗАДАНИЕ
     {
         Name = name;
@@ -54,19 +65,20 @@ class Animal
 
     public void ShowMessage()
     {
-        Console.WriteLine($"Животное: {Name}, Класс: {Class}, Средний вес: {AverageWeight}");
+        Console.WriteLine($"животное: {Name}, класс: {Class}, средний вес: {AverageWeight}");
     }
 
     public void SaveToFile(string fileName)                                             //  3 ЗАДАНИЕ
     {
         using (StreamWriter writer = new StreamWriter(fileName))
         {
-            writer.WriteLine($"Имя: {Name}");
-            writer.WriteLine($"Класс: {Class}");
-            writer.WriteLine($"Средний вес: {AverageWeight}");
+            writer.WriteLine($"имя: {Name}");
+            writer.WriteLine($"класс: {Class}");
+            writer.WriteLine($"средний вес: {AverageWeight}");
         }
-        Console.WriteLine("Данные успешно сохранены в файл.");
+        Console.WriteLine("данные записаны в файл");
     }
+    Publi
 }
 
 class Program
@@ -74,12 +86,15 @@ class Program
     static void Main()
     {
         Animal defaultAnimal = new Animal();
-        defaultAnimal.ShowMessage();
-
-        Animal userAnimal = new Animal();
+        Console.WriteLine("по умолчанию: ");                                                                //  ЭТО 
+        defaultAnimal.ShowMessage();                                                                        //  |  |
+                                                                                                            //  |__|
+        Animal userAnimal = new Animal();                                                                   //     |
+        Console.WriteLine("\nвведите данные для нового объекта:");                                          //  ЗАДАНИЕ
         userAnimal.InputFromUser();
         userAnimal.ShowMessage();
 
-        userAnimal.SaveToFile(@"C:\Users\ayraa\Desktop\input.txt");
+
+        userAnimal.SaveToFile(@"C:\Users\ayraa\source\repos\ConsoleApp6\ConsoleApp6\TextFile1.txt");
     }
 }
