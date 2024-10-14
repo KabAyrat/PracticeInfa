@@ -145,8 +145,25 @@ class Program
             writer.WriteLine($"Животное 2: Имя: {animal2.Name}, Класс: {animal2.Class}, Средний вес: {animal2.AverageWeight}");
 
             writer.WriteLine($"Суммарный вес {animal1.Name} и {animal2.Name} = {combinedAnimal.AverageWeight}");
-        }
 
+        if (animal1 > animal2)
+        {
+            writer.WriteLine($"{animal1.Name} тяжелее, чем {animal2.Name}.");
+            Console.WriteLine($"{animal1.Name} тяжелее, чем {animal2.Name}.");
+        }
+        else if (animal1 < animal2)
+        { 
+            writer.WriteLine($"{animal1.Name} легче, чем {animal2.Name}.");
+            Console.WriteLine($"{animal1.Name} легче, чем {animal2.Name}.");
+        }
+        else
+        {
+            writer.WriteLine($"{animal1.Name} и {animal2.Name} весят одинаково.");
+            Console.WriteLine($"{animal1.Name} и {animal2.Name} весят одинаково.");
+        }
+        }
+        
+    
         Console.WriteLine("Информация о животных и их суммарный вес записаны в файл.");
     }
 }
