@@ -2,6 +2,7 @@ using System;
 using System.IO;
 
 
+
 /*
 
 Тигр
@@ -17,23 +18,25 @@ _______________________________
 
  */
 
+
 class Animal
 {
-    private string name;                                                    // Закрытые переменные
+    private string name;                        // Закрытые переменные
+    private string animalClass;
+    private double averageWeight;
+
     public string Name
     {
         get { return name; }
         set { name = value; }
     }
 
-    private string animalClass;
-    public string Class                                                     // Инкапсуляция
+    public string Class
     {
         get { return animalClass; }
         set { animalClass = value; }
     }
 
-    private double averageWeight;
     public double AverageWeight
     {
         get { return averageWeight; }
@@ -50,26 +53,32 @@ class Animal
         }
     }
 
-    public Animal()                                                         
+    // Пустой конструктор
+    public Animal()
     {
         Name = "undefined";
         Class = "undefined";
         AverageWeight = 1;
     }
 
-    public void InputFromUser()                                              // Ввод данных от пользователя
+    public Animal(string name, string animalClass, double averageWeight)
+    {
+        Name = name;
+        Class = animalClass;
+        AverageWeight = averageWeight;
+    }
+
+    public void InputFromUser()                      // Ввод данных от пользователя
     {
         Console.Write("Введите имя животного: ");
         Name = Console.ReadLine();
-
         Console.Write("Введите класс животного: ");
         Class = Console.ReadLine();
-
         Console.Write("Введите средний вес животного: ");
         double weight;
         if (double.TryParse(Console.ReadLine(), out weight))
         {
-            AverageWeight = weight;                                         
+            AverageWeight = weight;
         }
         else
         {
@@ -78,30 +87,20 @@ class Animal
         }
     }
 
-    public Animal(string name, string animalClass, double averageWeight)     
-    {
-        Name = name;
-        Class = animalClass;
-        AverageWeight = averageWeight;
-    }
-
-    public void ShowMessage()                                               
+    public void ShowMessage()
     {
         Console.WriteLine($"Животное: {Name}, Класс: {Class}, Средний вес: {AverageWeight} кг.");
     }
 
-    public void SaveToFile(string fileName)                                  
+    public void SaveToFile(StreamWriter writer)
     {
-        using (StreamWriter writer = new StreamWriter(fileName, true))       
-        {
-            writer.WriteLine($"Имя: {Name}");
-            writer.WriteLine($"Класс: {Class}");
-            writer.WriteLine($"Средний вес: {AverageWeight} кг.");
-            writer.WriteLine();                                              
-        }
-        Console.WriteLine("Данные записаны в файл");
+        writer.WriteLine($"Имя: {Name}");
+        writer.WriteLine($"Класс: {Class}");
+        writer.WriteLine($"Средний вес: {AverageWeight} кг.");
+        writer.WriteLine();
     }
-    public static bool operator >(Animal a1, Animal a2)             //перегрузка операторов сравнения
+
+    public static bool operator >(Animal a1, Animal a2)
     {
         return a1.AverageWeight > a2.AverageWeight;
     }
@@ -110,24 +109,54 @@ class Animal
     {
         return a1.AverageWeight < a2.AverageWeight;
     }
-    public static Animal operator +(Animal a1, Animal a2)              // перегрузка операторов сложения
+
+    public static Animal operator +(Animal a1, Animal a2)
     {
         return new Animal
         {
-            Name = a1.Name + " и " + a2.Name, Class = a1.Class, AverageWeight = a1.AverageWeight + a2.AverageWeight
+            Name = a1.Name + " и " + a2.Name,
+            Class = a1.Class,
+            AverageWeight = a1.AverageWeight + a2.AverageWeight
         };
     }
 }
 
 class Program
 {
+    static void SaveComparisonResult(Animal animal1, Animal animal2, Animal combinedAnimal, string filePath)
+    {
+        using (StreamWriter writer = new StreamWriter(filePath, true))
+        {
+            animal1.SaveToFile(writer);
+            animal2.SaveToFile(writer);
+            writer.WriteLine($"Суммарный вес {animal1.Name} и {animal2.Name} = {combinedAnimal.AverageWeight}");
+
+            if (animal1 > animal2)
+            {
+                writer.WriteLine($"{animal1.Name} тяжелее, чем {animal2.Name}.");
+                Console.WriteLine($"{animal1.Name} тяжелее, чем {animal2.Name}.");
+            }
+            else if (animal1 < animal2)
+            {
+                writer.WriteLine($"{animal1.Name} легче, чем {animal2.Name}.");
+                Console.WriteLine($"{animal1.Name} легче, чем {animal2.Name}.");
+            }
+            else
+            {
+                writer.WriteLine($"{animal1.Name} и {animal2.Name} весят одинаково.");
+                Console.WriteLine($"{animal1.Name} и {animal2.Name} весят одинаково.");
+            }
+        }
+
+        Console.WriteLine("Информация о сравнении записана в файл.");
+    }
+
     static void Main()
     {
-        Console.WriteLine("данные для первого животного:");
+        Console.WriteLine("Данные для первого животного:");
         Animal animal1 = new Animal();
         animal1.InputFromUser();
-
-        Console.WriteLine("данные для второго животного:");
+        Console.WriteLine("Данные для второго животного:");
         Animal animal2 = new Animal();
         animal2.InputFromUser();
 
@@ -138,32 +167,7 @@ class Program
         Console.WriteLine($"Суммарный вес животных: {combinedAnimal.AverageWeight} кг.");
 
         string filePath = @"C:\Users\ayraa\source\repos\ConsoleApp6\ConsoleApp6\TextFile1.txt";
-        using (StreamWriter writer = new StreamWriter(filePath, true)) 
-        {
-            writer.WriteLine($"Животное 1: Имя: {animal1.Name}, Класс: {animal1.Class}, Средний вес: {animal1.AverageWeight}");
 
-            writer.WriteLine($"Животное 2: Имя: {animal2.Name}, Класс: {animal2.Class}, Средний вес: {animal2.AverageWeight}");
-
-            writer.WriteLine($"Суммарный вес {animal1.Name} и {animal2.Name} = {combinedAnimal.AverageWeight}");
-
-        if (animal1 > animal2)
-        {
-            writer.WriteLine($"{animal1.Name} тяжелее, чем {animal2.Name}.");
-            Console.WriteLine($"{animal1.Name} тяжелее, чем {animal2.Name}.");
-        }
-        else if (animal1 < animal2)
-        { 
-            writer.WriteLine($"{animal1.Name} легче, чем {animal2.Name}.");
-            Console.WriteLine($"{animal1.Name} легче, чем {animal2.Name}.");
-        }
-        else
-        {
-            writer.WriteLine($"{animal1.Name} и {animal2.Name} весят одинаково.");
-            Console.WriteLine($"{animal1.Name} и {animal2.Name} весят одинаково.");
-        }
-        }
-        
-    
-        Console.WriteLine("Информация о животных и их суммарный вес записаны в файл.");
+        SaveComparisonResult(animal1, animal2, combinedAnimal, filePath);
     }
 }
