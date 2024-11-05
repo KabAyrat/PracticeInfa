@@ -3,22 +3,6 @@ using System.IO;
 
 
 
-/*
-
-Тигр
-Млекопитающее
-220
-
-_______________________________
-Карась
-Рыба
-1
-(да, болльшой карась..)))
-
-
- */
-
-
 class Animal
 {
     private string name;                        // Закрытые переменные
@@ -166,7 +150,7 @@ class Program
         Animal combinedAnimal = animal1 + animal2;
         Console.WriteLine($"Суммарный вес животных: {combinedAnimal.AverageWeight} кг.");
 
-        string filePath = @"C:\Users\ayraa\source\repos\ConsoleApp6\ConsoleApp6\TextFile1.txt";
+        string filePath = @"C:\Users\d229\Desktop\labaaa\labaaa\TextFile1.txt";
 
         SaveComparisonResult(animal1, animal2, combinedAnimal, filePath);
     }
