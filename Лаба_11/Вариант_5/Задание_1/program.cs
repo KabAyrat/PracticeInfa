@@ -115,7 +115,7 @@ abstract class Animal
 
     public static Animal operator +(Animal a1, Animal a2)
     {
-        return new Animal
+        return new Mammal
         {
             Name = a1.Name + " и " + a2.Name,
             Class = a1.Class,
