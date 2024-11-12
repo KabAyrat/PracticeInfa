@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-class Animal
+abstract class Animal
 {
     private string name;
     private string animalClass;
@@ -58,10 +58,7 @@ class Animal
         Habitat = "unknown";
     }
 
-    public virtual void DescribeHabitat()
-    {
-        Console.WriteLine($"{Name} обитает в {Habitat}.");
-    }
+    public abstract void DescribeHabitat();
 
     public void InputFromUser()
     {
@@ -83,6 +80,7 @@ class Animal
         Console.Write("Введите место обитания животного: ");
         Habitat = Console.ReadLine();
     }
+
     public virtual void ShowMessage()
     {
         Console.WriteLine($"Животное: {Name}, Класс: {Class}, Средний вес: {AverageWeight} кг.");
@@ -92,6 +90,7 @@ class Animal
     {
         Console.WriteLine($"Место обитания: {Habitat}");
     }
+
     public void SaveToFile(StreamWriter writer)
     {
         writer.WriteLine($"Имя: {Name}");
@@ -113,7 +112,7 @@ class Animal
 
     public static Animal operator +(Animal a1, Animal a2)
     {
-        return new Animal
+        return new Mammal
         {
             Name = a1.Name + " и " + a2.Name,
             Class = a1.Class,
@@ -224,25 +223,12 @@ class Program
 
     static void Main()
     {
-        Console.WriteLine("Создание животного с использованием конструктора по умолчанию:");
-        Animal defaultAnimal = new Animal();
-        defaultAnimal.ShowMessage();
-        defaultAnimal.ShowHabitat();
-        Console.WriteLine();
-
-        Console.WriteLine("Создание животного с использованием конструктора с параметрами:");
-        Animal parameterizedAnimal = new Animal("Лев", "Млекопитающее", 190);
-        parameterizedAnimal.Habitat = "Саванна";
-        parameterizedAnimal.ShowMessage();
-        parameterizedAnimal.ShowHabitat();
-        Console.WriteLine();
-
         Console.WriteLine("Введите данные для первого животного:");
-        Animal animal1 = new Animal();
+        Animal animal1 = new Mammal();
         animal1.InputFromUser();
 
         Console.WriteLine("Введите данные для второго животного:");
-        Animal animal2 = new Animal();
+        Animal animal2 = new Bird();
         animal2.InputFromUser();
 
         Console.WriteLine("\nВывод информации о первом и втором животном:");
@@ -268,7 +254,7 @@ class Program
         foreach (var animal in animals)
         {
             animal.ShowMessage();
-            animal.ShowHabitat();
+            animal.DescribeHabitat();
             Console.WriteLine();
         }
     }
