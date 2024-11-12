@@ -58,7 +58,10 @@ abstract class Animal
         Habitat = "unknown";
     }
 
-    public abstract void DescribeHabitat();
+    public virtual void DescribeHabitat()
+    {
+        Console.WriteLine($"{Name} обитает в {Habitat}.");
+    }
 
     public void InputFromUser()
     {
@@ -112,7 +115,7 @@ abstract class Animal
 
     public static Animal operator +(Animal a1, Animal a2)
     {
-        return new Mammal
+        return new Animal
         {
             Name = a1.Name + " и " + a2.Name,
             Class = a1.Class,
@@ -120,8 +123,10 @@ abstract class Animal
             Habitat = "Общее место обитания"
         };
     }
-}
 
+    // Абстрактный метод для изменения свойств класса
+    public abstract void UpdateProperties();
+}
 
 class Mammal : Animal
 {
@@ -144,27 +149,20 @@ class Mammal : Animal
     {
         Console.WriteLine($"{Name} — млекопитающее, которое обитает в {Habitat}.");
     }
-}
 
-class Ungulate : Mammal
-{
-    public int HoofCount { get; set; }
-
-    public Ungulate() : base()
+    // Реализация метода для изменения свойств класса Mammal
+    public override void UpdateProperties()
     {
-        Class = "Ungulate";
-        HoofCount = 4;
-    }
-
-    public Ungulate(string name, double averageWeight, string habitat, bool hasFur, int hoofCount)
-        : base(name, averageWeight, habitat, hasFur)
-    {
-        HoofCount = hoofCount;
-    }
-
-    public override void DescribeHabitat()
-    {
-        Console.WriteLine($"{Name} — парнокопытное, которое обитает в {Habitat} и имеет {HoofCount} копыта.");
+        Console.WriteLine("Обновление свойств для млекопитающего:");
+        Console.Write("Введите новое имя: ");
+        Name = Console.ReadLine();
+        Console.Write("Введите новый средний вес: ");
+        if (double.TryParse(Console.ReadLine(), out double newWeight))
+        {
+            AverageWeight = newWeight;
+        }
+        Console.Write("Есть ли мех (да/нет): ");
+        HasFur = Console.ReadLine().ToLower() == "да";
     }
 }
 
@@ -190,72 +188,19 @@ class Bird : Animal
         string flyingAbility = CanFly ? "может летать" : "не может летать";
         Console.WriteLine($"{Name} — птица, которая обитает в {Habitat} и {flyingAbility}.");
     }
-}
 
-
-class Program
-{
-    static void SaveComparisonResult(Animal animal1, Animal animal2, Animal combinedAnimal, string filePath)
+    // Реализация метода для изменения свойств класса Bird
+    public override void UpdateProperties()
     {
-        using (StreamWriter writer = new StreamWriter(filePath, true))
+        Console.WriteLine("Обновление свойств для птицы:");
+        Console.Write("Введите новое имя: ");
+        Name = Console.ReadLine();
+        Console.Write("Введите новый средний вес: ");
+        if (double.TryParse(Console.ReadLine(), out double newWeight))
         {
-            animal1.SaveToFile(writer);
-            animal2.SaveToFile(writer);
-            writer.WriteLine($"Суммарный вес {animal1.Name} и {animal2.Name} = {combinedAnimal.AverageWeight}");
-            if (animal1 > animal2)
-            {
-                writer.WriteLine($"{animal1.Name} тяжелее, чем {animal2.Name}.");
-                Console.WriteLine($"{animal1.Name} тяжелее, чем {animal2.Name}.");
-            }
-            else if (animal1 < animal2)
-            {
-                writer.WriteLine($"{animal1.Name} легче, чем {animal2.Name}.");
-                Console.WriteLine($"{animal1.Name} легче, чем {animal2.Name}.");
-            }
-            else
-            {
-                writer.WriteLine($"{animal1.Name} и {animal2.Name} весят одинаково.");
-                Console.WriteLine($"{animal1.Name} и {animal2.Name} весят одинаково.");
-            }
+            AverageWeight = newWeight;
         }
-        Console.WriteLine("Информация о сравнении записана в файл.");
-    }
-
-    static void Main()
-    {
-        Console.WriteLine("Введите данные для первого животного:");
-        Animal animal1 = new Mammal();
-        animal1.InputFromUser();
-
-        Console.WriteLine("Введите данные для второго животного:");
-        Animal animal2 = new Bird();
-        animal2.InputFromUser();
-
-        Console.WriteLine("\nВывод информации о первом и втором животном:");
-        animal1.ShowMessage();
-        animal1.ShowHabitat();
-        animal2.ShowMessage();
-        animal2.ShowHabitat();
-        Console.WriteLine();
-
-        Animal combinedAnimal = animal1 + animal2;
-        Console.WriteLine($"Суммарный вес животных {animal1.Name} и {animal2.Name}: {combinedAnimal.AverageWeight} кг.");
-        string filePath = @"C:\Users\ayraa\source\repos\InfaLab`s\InfaLab`s\TextFile1.txt";
-        SaveComparisonResult(animal1, animal2, combinedAnimal, filePath);
-
-        Console.WriteLine("\nСоздаем массив из четырёх животных:");
-        Animal[] animals = new Animal[4];
-        animals[0] = animal1;
-        animals[1] = animal2;
-        animals[2] = new Mammal { Name = "Тигр", Class = "Млекопитающее", AverageWeight = 250, Habitat = "Джунгли" };
-        animals[3] = new Bird { Name = "Сокол", Class = "Птица", AverageWeight = 1.5, Habitat = "Горы" };
-
-        Console.WriteLine("\nИнформация о всех животных из массива:");
-        foreach (var animal in animals)
-        {
-            animal.ShowMessage();
-            animal.DescribeHabitat();
-            Console.WriteLine();
-        }
+        Console.Write("Может ли летать (да/нет): ");
+        CanFly = Console.ReadLine().ToLower() == "да";
     }
 }
